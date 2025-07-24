@@ -3,10 +3,40 @@ package com.techmania.sudokusolver.logic
 class SudokuSolver {
 
     fun solve(board: Array<IntArray>): Boolean {
-        // TODO: Implement backtracking algorithm
+        val find = findEmpty(board)
+        val row: Int
+        val col: Int
+
+        if (find == null) {
+            return true
+        } else {
+            row = find.first
+            col = find.second
+        }
+        for (num in 1..9) {
+            if (isValid(board, row, col, num)) {
+                board[row][col] = num
+
+                if (solve(board)) {
+                    return true
+                }
+
+                board[row][col] = 0
+            }
+        }
+
         return false
     }
-
+    private fun findEmpty(board: Array<IntArray>): Pair<Int, Int>? {
+        for (r in 0..8) {
+            for (c in 0..8) {
+                if (board[r][c] == 0) {
+                    return Pair(r, c)
+                }
+            }
+        }
+        return null
+    }
     private fun isValid(board: Array<IntArray>, row: Int, col: Int, num: Int): Boolean {
         for (c in 0..8) {
             if (board[row][c] == num) {
